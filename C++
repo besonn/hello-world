@@ -1,0 +1,220 @@
+//#include <bits/stdc++.h>
+using namespace std;
+class Automobile;
+class Park
+{
+private:
+	Automobile **spaces;
+	int N;
+	int income ;
+	int num;
+	int freespace;
+public:
+	Park(int i)
+	{
+		spaces = new Automobile*[i];
+		for (int j = 0; j < i; j++)
+			spaces[j] = NULL;
+		income = 0;
+		num = 0;
+		this->N = i;
+		freespace = i;
+	}
+	
+	~Park()
+	{
+		delete[] spaces;
+	}
+	void showInfo();
+	bool paymoney(Automobile *p, int f);
+	bool parkspace(Automobile *p);
+	
+};
+class Automobile
+{
+public:
+	string getmassege()
+	{
+		return massege;
+	}
+	void enter(Park &p)
+	{
+		p.parkspace(this);
+	}
+	void leave(Park &p)
+	{
+
+	}
+protected:
+	string massege;
+};
+void Park::showInfo()
+{
+	if (num == 0)
+		cout << "停车场停放了" << num << "辆汽车，共收入" << income << "元停车费" << endl;
+	else
+	{
+		cout << "停车场上停放了" << num << "辆汽车 ：";
+		for (int i = 0; i < N; i++)
+		{
+			if (spaces[i] != NULL)
+				cout << spaces[i]->getmassege() << ",";
+		}
+		cout << "共收入" << income << "停车费"<<endl;
+	}
+}
+
+bool Park::parkspace(Automobile *p)
+{
+	for (int i = 0; i < N; i++)
+	{
+		if (spaces[i] == NULL)
+		{
+			spaces[i] = p;
+			num += 1;
+			cout << p->getmassege() << "进入停车场，分配停车位" << endl;
+			return true;
+		}
+	}
+	cout << "无法为" << p->getmassege() << "分配停车位" << endl;
+	return false;
+}
+bool Park::paymoney(Automobile *p, int money)
+{
+	for (int i = 0; i < N; i++)
+	{
+		if (spaces[i] == p)
+		{
+			spaces[i] = NULL;
+			num--;
+			income += money;
+			cout << p->getmassege() << "离开停车场，缴纳停车费" << money << "元" << endl;
+			return true;
+		}
+	}
+}
+class Truck : public Automobile
+{
+private:
+	float weight;
+	//Automobile member;
+public:
+	float getweight()
+	{
+		return weight;
+	}
+	Truck(string a, float b)
+	{
+		massege = a;
+		weight = b;
+	}
+	/*void enter(Park &x)
+	{
+		for(int i=0;i<x.N;i++)
+		{
+			if (x->spaces[i] == NULL)
+			{
+				printf("%s进入停车场，分配停车位\n", massege);
+				x.freespace--;
+			}
+		}
+			printf("无法为%s分配停车位", massege);
+	}*/
+	void leave(Park &x)
+	{
+		x.paymoney(this, 3);
+	}
+};
+class Car : public Automobile
+{
+private:
+	string kind;
+public:
+	string getkind()
+	{
+		return kind;
+	}
+	Car(string a, string b)
+	{
+		massege = a;
+		kind = b;
+	}
+	/*void enter(Park &x)
+	{
+		for(int i=0;i<x->N;i++)
+		{
+			if (x->spaces[i] == NULL)
+			{
+				printf("%s进入停车场，分配停车位\n", massege);
+				x->freespace--;
+			}
+		}
+			printf("无法为%s分配停车位", massege);
+	}*/
+	void leave(Park &x)
+	{
+		/*x->freespace++;
+		printf("%s离开停车场，缴纳停车费1元\n", massege);
+		x->income += 1;*/
+		x.paymoney(this, 1);
+
+	}
+};
+class Bus : public Automobile
+{
+private:
+	int size;
+public:
+	int getsize()
+	{
+		return size;
+	}
+	Bus(string a, int b)
+	{
+		massege = a;
+		size = b;
+	}
+	/*	void enter(Park &x)
+	{
+		for(int i=0;i<x->N;i++)
+		{
+			if (x->spaces[i] == NULL)
+			{
+				printf("%s进入停车场，分配停车位\n", massege);
+				x->freespace--;
+			}
+		}
+			printf("无法为%s分配停车位", massege);
+	}*/
+	void leave(Park &x)
+	{
+		x.paymoney(this, 2);
+	}
+
+};
+
+int N;
+int main()
+{
+	cout << "请输入停车位数量：";
+	cin >> N;
+	Park park (N);
+	Car car1("鲁B-123456", "奥迪A6");
+	car1.enter(park);
+	Truck truck("鲁B-23456", 15);
+	truck.enter(park);
+	car1.leave(park);
+	Bus bus("鲁B-34567", 50);
+	//spaces[1] = &bus;
+	bus.enter(park);
+	park.showInfo();
+	Car car2("鲁B-45678", "宝马320");
+	//spaces[2] = &car2;
+	car2.enter(park);
+	bus.leave(park);
+	truck.leave(park);
+	park.showInfo();
+	//delete spaces[];
+	return 0;
+}
+
