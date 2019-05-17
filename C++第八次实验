@@ -1,0 +1,496 @@
+#include <bits/stdc++.h>
+#include <iostream>
+using namespace std;
+class Date
+{
+public:
+	Date(int x, int y, int z)
+	{
+		year = x;
+		month = y;
+		day = z;
+		separator = '-';
+	}
+	Date(Date &d)
+	{
+		year = d.year;
+		month = d.month;
+		day = d.day;
+		separator = d.separator;
+	}
+	void setDate(int year, int month, int day);
+	void setYear(int year);
+	int getYear()
+	{
+		return year;
+	}
+	void setMonth(int month);
+	int getMonth()
+	{
+		return month;
+	}
+	void setDay(int day);
+	int getDay()
+	{
+		return day;
+	}
+	void setSeparator(char separator);
+	void printFullYear();
+	void printStandardYear();
+	int fullYearsTo(int year, int month, int day);
+	int daysTo1(int year, int month, int day);
+	int daysTo2(int year, int month, int day);
+	int getDaysofYear(int year, int month, int day);
+	int getLeftDaysYear(int year, int month, int day);
+	int operator- (Date &c2);
+	bool operator> (Date &c3);
+	bool operator< (Date &c4);
+private:
+	int year;
+	int month;
+	int day;
+	char separator;
+};
+int Date ::operator- (Date &c2)
+{
+	static Date hire(1998, 4, 1);
+	//int y = daysTo2 (year, month, day);
+	int x = c2.daysTo2(hire.getYear(), hire.getMonth(), hire.getDay());
+	//c2.chazhi = x - y;
+	return (x );
+}
+
+bool Date :: operator> (Date &c3)
+{
+	int y = daysTo1(year, month, day);
+	int x = this->daysTo1(year, month, day);
+	int t = x - y;
+	if (t > 0)
+	{
+		return 1;
+	}
+	else
+	{
+		return 0;
+	}
+}
+bool Date :: operator< (Date &c4)
+{
+	int y = daysTo1(year, month, day);
+	int x = c4.daysTo1(year, month, day);
+	int t = x - y;
+	if (t < 0)
+	{
+		return 1;
+	}
+	else
+	{
+		return 0;
+	}
+}
+
+void Date::printFullYear()
+{
+	cout << year << separator << setfill('0') << setw(2) << month << separator << setfill('0') << setw(2) << day << endl;
+}
+void Date::printStandardYear()
+{
+	cout << year % 100 << separator << setfill('0') << setw(2) << month << separator << setfill('0') << setw(2) << day << endl;
+}
+void Date::setSeparator(char c)
+{
+	separator = c;
+}
+int Date::fullYearsTo(int x, int y, int z)///计算工作满了多少年
+{
+	static Date birth(1969, 8, 11);
+	int tmp = x - birth.year;
+	if (x > birth.year)
+		if (y < birth.month)
+		{
+			tmp--;
+		}
+		else if (y == birth.month)
+		{
+			if (z < birth.day)
+				tmp--;
+		}
+	return tmp;
+}
+int IsLeapYear(int y)
+{
+	return (y % 100 != 0 && y % 4 == 0) || (y % 400 == 0);
+}
+int Date::getDaysofYear(int yea, int mont, int da) ///计算是今年的第几天
+{
+	int sum = 0;
+	int m = 0;
+	if (yea % 4 == 0 && yea % 100 != 0 || yea % 400 == 0)
+		m = 29;
+	else
+		m = 28;
+	switch (mont)
+	{
+	case 12:
+		sum += 30;
+	case 11:
+		sum += 31;
+	case 10:
+		sum += 30;
+	case 9:
+		sum += 31;
+	case 8:
+		sum += 31;
+	case 7:
+		sum += 30;
+	case 6:
+		sum += 31;
+	case 5:
+		sum += 30;
+	case 4:
+		sum += 31;
+	case 3:
+		sum += m;
+	case 2:
+		sum += 31;
+	case 1:
+		sum += da;
+	}
+	return sum;
+}
+int Date::getLeftDaysYear(int year, int month, int day)///计算本年还剩多少天
+{
+	int sum = 0;
+	int m = 0;
+	if (year % 4 == 0 && year % 100 != 0 || year % 400 == 0)
+		m = 29;
+	else
+		m = 28;
+	switch (month)
+	{
+	case 12:
+	{
+		sum += 31 - day;
+		break;
+	}
+	case 11:
+	{
+		sum += 30 - day;
+		break;
+	}
+	case 10:
+	{
+		sum += 31 - day;
+		break;
+	}
+	case 9:
+	{
+		sum += 30 - day;
+		break;
+	}
+	case 8:
+	{
+		sum += 31 - day;
+		break;
+	}
+	case 7:
+	{
+		sum += 31 - day;
+		break;
+	}
+	case 6:
+	{
+		sum += 30 - day;
+		break;
+	}
+	case 5:
+	{
+		sum += 31 - day;
+		break;
+	}
+	case 4:
+	{
+		sum += 30 - day;
+		break;
+	}
+	case 3:
+	{
+		sum += 31 - day;
+		break;
+	}
+	case 2:
+	{
+		sum += m - day;
+		break;
+	}
+	case 1:
+	{
+		sum += 31 - day;
+		break;
+	}
+	}
+	switch (month + 1)
+	{
+	case 2:
+		sum += 28;
+	case 3:
+		sum += 31;
+	case 4:
+		sum += 30;
+	case 5:
+		sum += 31;
+	case 6:
+		sum += 30;
+	case 7:
+		sum += 31;
+	case 8:
+		sum += 31;
+	case 9:
+		sum += 30;
+	case 10:
+		sum += 31;
+	case 11:
+		sum += 30;
+	case 12:
+		sum += 31;
+	case 13:
+		break;
+	}
+	return sum;
+}
+
+
+int Date::daysTo1(int x, int y, int z)
+{
+	static Date birth(1969, 8, 11);
+	if (x > birth.year)
+	{
+		int cnt = 0;
+		for (int i = birth.year + 1; i <= x; i++)
+		{
+			if (IsLeapYear(i))
+				cnt++;
+		}
+		int day1 = getDaysofYear(x, y, z);
+		int day2 = getLeftDaysYear(birth.year, birth.month, birth.day);
+		return (day1 + day2 + 365 * (x - birth.year - 1) + cnt);
+	}
+	else if (x < birth.year)
+	{
+		int cnt = 0;
+		for (int i = x + 1; i <= birth.year; i++)
+		{
+			if (IsLeapYear(i))
+				cnt++;
+		}
+		int day1 = getLeftDaysYear(x, y, z);
+		int day2 = getDaysofYear(birth.year, birth.month, birth.day);
+		return -(day1 + day2 + 365 * (birth.year - x - 1) + cnt);
+	}
+	else if (x == birth.year)
+	{
+		int b = getDaysofYear(x, y, z);
+		int a = getDaysofYear(birth.year, birth.month, birth.day);
+		return a - b;
+	}
+}
+int Date::daysTo2(int x, int y, int z)
+{
+	static Date hire(1998, 4, 1);
+	if (x > hire.year)
+	{
+		int cnt = 0;
+		for (int i = hire.year + 1; i <= x; i++)
+		{
+			if (IsLeapYear(i))
+				cnt++;
+		}
+		int day1 = getDaysofYear(x, y, z);
+		int day2 = getLeftDaysYear(hire.year, hire.month, hire.day);
+		return (day1 + day2 + 365 * (x - hire.year - 1) + cnt);
+	}
+	else if (x < hire.year)
+	{
+		int cnt = 0;
+		for (int i = x + 1; i <= hire.year; i++)
+		{
+			if (IsLeapYear(i))
+				cnt++;
+		}
+		int day1 = getLeftDaysYear(x, y, z);
+		int day2 = getDaysofYear(hire.year, hire.month, hire.day);
+		return -(day1 + day2 + 365 * (hire.year - x - 1) + cnt);
+	}
+	else if (x == hire.year)
+	{
+		int b = getDaysofYear(x, y, z);
+		int a = getDaysofYear(hire.year, hire.month, hire.day);
+		return a - b;
+	}
+}
+static Date today(2010, 4, 30);
+class Employee
+{
+public:
+	Employee(string a, string b, Date pbirthDate, Date phireDate) : birthDate(pbirthDate), hireDate(phireDate)
+	{
+		firstName = a;
+		lastName = b;
+	}
+	//Employee(Employee &e);
+	void print();
+	int getAge(Date &date);
+	int getYearsWorked(Date &date);
+	int getDaysWorked(Date &date);
+	//bool operator> (const Employee &c3);
+	//bool operator< (const Employee &c4);
+
+	Date gethireDate(Employee &c7)
+	{
+		return c7.hireDate;
+	}
+	static Employee & getMostFaith( Employee employees[], int n)
+	{
+		int x = 0;
+		for (int i = 0; i < n; i++)
+		{
+			
+			if (employees[i].hireDate > employees[i+1].hireDate )
+			{
+				x = i;
+			}
+		}
+		return employees[x];
+	}
+
+	~Employee()
+	{
+
+	}
+	
+private:
+	string firstName;
+	string lastName;
+	Date birthDate;
+	Date hireDate;
+};
+
+/*
+static const Employee & getMostFaith(const Employee employees[], int n)
+{
+	int max = 0;
+	for (int i = 0; i < n; i++)
+	{
+		if (employees[i] > employees[i + 1])
+			max = i;
+	}
+	employees[max];
+}*/
+void Employee::print()
+{
+	cout << lastName << "," << firstName << " Hired: ";
+	hireDate.printFullYear();
+	cout << "Birthday: ";
+	birthDate.printFullYear();
+
+}
+/*
+bool Employee :: operator> (const Employee &c3)
+{
+	//Date C = this -> gethireDate;
+	int y = getDaysWorked(hireDate);
+	int x = this-> getDaysWorked(c3.hireDate);
+	int t = x - y;
+	if (t > 0)
+	{
+		return 1;
+	}
+	else
+	{
+		return 0;
+	}
+}
+*/
+/*
+bool Employee :: operator< (const Employee &c4)
+{
+	int y = getDaysWorked(hireDate);
+	int x = this->getDaysWorked(c4.gethireDate);
+	int t = x - y;
+	if (t < 0)
+	{
+		return 1;
+	}
+	else
+	{
+		return 0;
+	}
+}
+*/
+
+int Employee::getAge(Date &P)
+{
+	int q;
+	q = P.fullYearsTo(P.getYear(), P.getMonth(), P.getDay());
+	cout<<q<<endl;
+	return q;
+}
+static Date birth(1969, 8, 11);
+static Date hire(1998, 4, 1);
+//static Date today(2010, 4, 30);
+int Employee::getDaysWorked(Date &T)
+{
+	int m;
+	m = T.daysTo2(T.getYear(), T.getMonth(), T.getDay());
+	int c;
+	c = T - hire;
+	//cout<<c<<endl;
+	return m;
+}
+/*
+int main()
+{
+	Employee manager("Bob", "Blue", birth, hire);
+	cout << endl;
+	manager.print();
+	cout << endl;
+	cout << manager.getAge(today) << endl;
+	cout << manager.getDaysWorked(today) << endl;
+	return 0;
+}
+*/
+
+
+
+int main()
+{
+	Date birth1(1969, 8, 11);
+	Date birth2(1971, 2, 7);
+	Date birth3(1970, 11, 17);
+	Date birth4(1973, 12, 11);
+	Date birth5(1966, 8, 19);
+	Date hire1(2000, 5, 26);
+	Date hire2(1998, 5, 26);
+	Date hire3(2001, 5, 26);
+	Date hire4(2002, 5, 26);
+	Date hire5(2000, 12, 26);
+	Employee manager1("Allen", "Blue", birth1, hire1);
+	Employee manager2("Bob", "Black", birth2, hire2);
+	Employee manager3("Celina", "White", birth3, hire3);
+	Employee manager4("Dogg", "Green", birth4, hire4);
+	Employee manager5("Emma", "Blue", birth5, hire5);
+	Employee employees[5] = {manager1,manager2,manager3,manager4,manager5};
+	Employee Q= employees->getMostFaith(employees, 5);
+	
+	cout << "共有5名员工" << endl;
+	for (int i = 0; i < 5; i++)
+	{
+		employees[i].print();
+	}
+	cout << endl;
+	cout << "工作时间最长的员工是：" << endl;
+	Q.print();
+	int x=Q.getDaysWorked(today);
+	cout << "工作了" << x << "天" << endl;
+}
+
