@@ -1,0 +1,128 @@
+#include <bits/stdc++.h>
+using namespace std;
+struct Rule
+{
+    int m;
+    int r;
+}rules[105];
+void inputRules (Rule rules [],int n)
+{
+    for(int i=1;i<=n;i++)
+    {
+        cout<<"请输入第"<<i<<"条规则：";
+        int m,r;
+        cin>>m>>r;
+        rules[i].m=m;
+        rules[i].r=r;
+    }
+}
+void inputmenu(Rule rules [],int n)
+{
+    cout<<"纳税规则如下："<<endl;
+    cout<<"纳税线\t税率"<<endl;
+    for(int i=1;i<=n;i++)
+    {
+        cout<<rules[i].m<<"\t"<<rules[i].r<<endl;
+    }
+}
+double computeTax(Rule rules[],int n,int income)
+{
+    if(income <= rules[1].m )
+    {
+        //cout<<"再见";
+        return 0;
+    }
+    else if(income > rules[n].m)
+    {
+        double sum=0;
+        for(int i=1;i<n;i++)
+        {
+            sum+=(rules[i+1].m-rules[i].m)*rules[i].r;
+        }
+        sum+=(income - rules[n].m)*rules[n].r;
+        return sum/100;
+    }
+    else
+    {
+        int x=0;
+        double sum=0;
+        for(int i=1;i<=n;i++)
+        {
+            if(income <= rules[i+1].m && income >rules[i].m )
+            {
+                x=i;
+                sum+= (income - rules[i].m)*rules[i].r;
+                break;
+            }
+        }
+        for(int i=1;i<x;i++)
+        {
+            sum+=(rules[i+1].m-rules[i].m)*rules[i].r;
+        }
+        return sum/100;
+    }
+}
+
+void outputsum(Rule rules[],int n,int income)
+{
+    if(income > rules[n].m)
+    {
+
+    if(n==1)
+        {
+            printf("(%d-%d)*%d/100\n",income,rules[1].m,rules[1].r);
+        }
+        else
+        {
+            printf("[(%d-%d)*%d)",income,rules[n].m,rules[n].r);
+            for(int i=n;i>1;i--)
+                printf("+((%d-%d)*%d)",rules[i].m,rules[i-1].m,rules[i-1].r );
+            printf("]/100\n");
+        }
+    }
+    else
+    {
+        int x=0;
+        double sum=0;
+        for(int i=1;i<=n;i++)
+        {
+            if(income <= rules[i].m && income >rules[i-1].m )
+            {
+                x=(i-1);
+                break;
+            }
+        }
+        printf("[(%d-%d)*%d)",income,rules[x].m,rules[x].r);
+            for(int i=x;i> 1;i--)
+                printf("+((%d-%d)*%d)",rules[i].m,rules[i-1].m,rules[i-1].r );
+            printf("]/100\n");
+    }
+}
+
+
+int main()
+{
+    int n;
+    cout<<"请输入规则的条数：";
+    cin>>n;
+    inputRules(rules,n);
+    inputmenu(rules,n);
+
+    while(1)
+    {
+        int income;
+        cout<<"请输入您的收入：";
+        cin>>income;
+
+        if(income ==-1)
+            break;
+        double t=0;
+        t=computeTax(rules,n,income);
+        cout<<"您的收入是"<<income<<",";
+        printf(" 应交所得税：%0.2f元\n",t);
+        if(t!=0)
+        outputsum(rules,n,income);
+    }
+    cout<<"再见"<<endl;
+    return 0;
+}
