@@ -1,0 +1,125 @@
+#include <bits/stdc++.h>
+using namespace std;
+struct Point
+{
+    int x;
+    int y;
+};
+void displayMenu()
+{
+    for(int i=1;i<=20;i++)
+        cout<<"*";
+    cout<<endl;
+    cout<<"\t1.Circle\n\t2.Rectangle\n\t0.Exit\n";
+    for(int i=1;i<=20;i++)
+        cout<<"*";
+    cout<<endl;
+    cout<<"Please select the shape:";
+}
+
+void getTwoPoints(Point * startP  , Point * endP )
+{
+   // struct Point startP;
+    //struct Point endP;
+    cout<<"Please input the coordinate (x,y) of the start point:";
+    int p,q;
+    cin>>p>>q;
+    startP->x=p;
+    startP->y=q;
+    cout<<"Please input the coordinate (x,y) of the end point:";
+    int Ex,Ey;
+    scanf("%d",&Ex);
+    scanf("%d",&Ey);
+    endP->x=Ex;
+    endP->y=Ey;
+}
+bool isInt(double x)
+{
+    long int y=(long int) x;
+
+    if((x-y)<=0.0000001&&(x-y)>=-0.0000001)
+    {
+        return false;
+    }
+    return true;
+}
+
+
+void printPoint (Point * P)
+{
+    //Point P;
+    cout<<"("<<P->x<<","<<P->y<<")";
+}
+
+void drawCircle(Point * sP , Point * eP)
+{
+
+
+   // cout<<startP.x<<endl<<startP.y<<endl<<endP.x<<endl<<endP.y<<endl;
+
+    if(eP->x < sP->x || eP->y < sP->y)
+    {
+        cout<<"Not a circle,Select again"<<endl;
+        return;
+    }
+
+
+    if(( eP->x - sP->x) != (eP->y - sP->y) )
+    {
+        cout<<"Not a circle,Select again"<<endl;
+        return;
+    }
+    double Q = ((eP->x - sP->x));
+    Q/=2;
+        if((int)Q != ((eP->x - sP->x)/2) )
+    {
+       cout<<"Not a circle,Select again"<<endl;
+      return;
+    }
+   // Rd=(int)Rd;
+
+    cout<<"Draw a circle at center ("<<(sP->x+eP->x)/2<<","<<(sP->y+eP->y)/2<<") with radius ";
+    //cout<<"666"<<endl;
+   //cout<< (sqrt((eP->x-sP->x)*(eP->x-sP->x)+(eP->y-sP->y)*(eP->y-sP->y)))/2<<endl;
+   cout<<(eP->x - sP->x)/2<<endl;
+
+}
+void drawRectangle( Point * startP,Point * endP)
+{
+    //Point startP,endP;
+    if(endP->x < startP->x || endP->y < startP->y)
+    {
+
+        cout<<"Not a rectangle,Select again"<<endl;
+        return;
+    }
+    cout<<"Draw a rectangle at topleft"<<"("<<startP->x<<","<<startP->y<<")"<<
+    ", whose width is "<<endP->x-startP->x<<" and height is "<<endP->y-startP->y<<endl;
+}
+
+int main()
+{
+    int choice;
+    struct Point startP,endP;
+    while( choice)
+    {
+        displayMenu();
+        cin>>choice;
+        switch(choice)
+        {
+        case 1:
+            getTwoPoints(&startP,&endP);
+            drawCircle(&startP,&endP);
+            break;
+        case 2:
+            getTwoPoints(&startP,&endP);
+            drawRectangle(&startP,&endP);
+            break;
+        case 0:
+            cout<<"Good Bye!"<<endl;
+            break;
+        default:
+            cout<<"Not supported!Please select again!"<<endl;
+        }
+    }
+}
