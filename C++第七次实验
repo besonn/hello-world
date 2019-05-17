@@ -214,7 +214,6 @@ int main()
 	bus.leave(park);
 	truck.leave(park);
 	park.showInfo();
-	//delete spaces[];
 	return 0;
 }
 
