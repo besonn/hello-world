@@ -1,0 +1,301 @@
+#include <iostream>
+#include <ctime>
+#include <cstdlib>
+
+using namespace std;
+const int MAX_TYPE = 62;
+
+class Passenger
+{
+	char number;
+	int luggage;
+	int style;
+	int destination;
+public:
+	Passenger(char num, int lug, int sty, int des):number(num),luggage(lug),style(sty),destination(des)
+	{}
+	~Passenger()
+	{}
+	Passenger()
+	{}
+	//void fuzhi();
+	void print();
+	char getnum()
+	{
+		return number;
+	}
+	int getlug()
+	{
+		return luggage;
+	}
+	int getstyle()
+	{
+		return style;
+	}
+	int getdes()
+	{
+		return destination;
+	}
+};
+
+/*
+void Passenger:: fuzhi(char num,int lug,int sty,int des)
+{
+	number=num;
+	luggage=lug;
+	style=sty;
+	destination=des;
+}*/
+
+void Passenger ::print()
+{
+	cout << "我是乘客";
+	printf("%c", number);
+	cout << "，选择";
+	if(style == 0 ) ///自由行是freestyle
+		cout<<"自由行";
+	else
+		cout<<"报名旅行社";
+	if (destination == 0)
+	{
+		cout << "，国内短途";
+	}
+	else if (destination== 1)
+	{
+		cout << "，国内长途";
+	}
+	else
+	{
+		cout << "，国际游";
+	}
+	cout<<"，携带"<<luggage<<"件行李，行李编号是";
+	for (int i = 0; i < luggage; i++)
+	{
+		cout << number << "0" << i << " ";
+	}
+
+		if (destination == 0)
+			cout << "买票需付10元。";
+		else if (destination == 1)
+			cout << "买票需付100元。";
+		else
+		{
+			cout << " 买票需付500元，";
+			if (luggage == 3)
+				cout << "行李托运费100元。";
+		}
+	cout << endl;
+}
+const int random1()///生成M个人数
+{
+	
+		int number = rand();
+		int remainder = number % MAX_TYPE;
+		return remainder;
+}
+
+const char random2 ()///随机生成 乘客的编码
+{
+	
+	for (int i = 1; i <= MAX_TYPE; i++)
+	{
+		int number = rand();
+		int remainder = number % MAX_TYPE;
+		if (remainder >= 1 && remainder <= 26)
+		{
+			char c = remainder + 64;
+			//cout << c ;
+			return c;
+		}
+		else if (remainder >= 27 && remainder <= 52)
+		{
+			char c = remainder + 70;
+			//cout << c ;
+			return c;
+		}
+		else
+		{
+			char c = remainder - 5;
+			//cout << c ;
+			return c;
+		}
+
+	}
+}
+const int random3()///自由行和旅行社
+{
+	
+	int number = rand();
+	int remainder = number % 2;
+	return remainder;
+}
+const int random4()///目的地 
+{
+	
+	int number = rand();
+	int remainder = number % 3;
+	return remainder;
+}
+const int random5()///行李数
+{
+	
+	int number = rand();
+	int remainder = number % 3;
+	return remainder+1;
+}
+
+int M;
+int main()
+{
+	Passenger pass;
+	Passenger * p [62];
+	srand(static_cast<unsigned>  (time(NULL)));
+	 M = random1();
+	cout << M << endl;
+	// pass(random2(), random5(), random3(), random4());
+	for (int i = 1; i <= M; i++) {
+		p[i] = new Passenger(random2(),random5(),random3(),random4());
+		p[i]->print();
+	}
+	cout << endl << endl << endl;
+	int x = 0;
+	cout << "旅行社开始报名" << endl;
+	for (int i = 1; i <= M; i++)
+	{
+		if (p[i]->getstyle() == 1)
+			x++;
+	}
+	cout << "旅行社共计安排了5个旅行团，共计" << x << "人报名。" << endl;
+	cout << "出行的目的地分别是：国内短途，国内长途，国内短途，国内长途，国际游"<<endl;
+	cout << "每个旅行团的人数分别是：";
+	int cnt1 = 0, cnt2 = 0, cnt3 = 0;
+	int sum1 = 0, sum2 = 0, sum3 = 0;
+	for (int i = 1; i <= M; i++)
+	{
+		if (p[i]->getstyle() == 1)
+		{
+			if (p[i]->getdes() == 0)
+				cnt1++;
+			else if (p[i]->getdes() == 1)
+				cnt2++;
+			else
+			{
+				cnt3++;
+				if (p[i]->getlug() == 3)
+					sum3 += 100;
+			}
+		}
+	}
+	int ctt1 = cnt1;
+	int ctt2 = cnt2;
+	if (cnt1 & 1)
+	{
+		
+		ctt1++;
+		ctt1 /= 2;
+	}
+		
+	if (cnt2 & 1)
+	{
+		ctt2++;
+		ctt2 /= 2;
+
+	}
+		
+	cout << ctt1 << " " << ctt2 << " " << cnt1-ctt1<< " " << cnt2-ctt2<<" "<< cnt3;
+	cout << endl;
+	cout << "每个旅游团需要支付的票价是：";
+	cout << 10 * ctt1 << " " << 100 * ctt2 << " " << 10 * (cnt1 - ctt1) << " " << 100 * (cnt2 - ctt2)<<" ";
+	sum3 += cnt3 * 500;
+	cout << sum3 << "。" << endl;
+	cout << endl << endl;
+	cout << "售票处开始售票" << endl;
+	cout << "售票结束，营业额统计如下：" << endl;
+	cout << "国内短途自由行：乘客姓名：";
+	int sumfree0 = 0;
+	for (int i = 1; i <= M; i++)
+	{
+		
+		if (p[i]->getdes() == 0 && p[i]->getstyle() == 0)
+		{
+			cout << p[i]->getnum() << " ";
+			sumfree0 += 10;
+		}
+	}
+	cout << ","<<sumfree0 <<"元"<< endl;
+cout << "国内长途自由行：乘客姓名：";
+int sumfree1 = 0;
+for (int i = 1; i <= M; i++)
+{
+
+	if (p[i]->getdes() == 1 && p[i]->getstyle() == 0)
+	{
+		cout << p[i]->getnum() << " ";
+		sumfree1 += 100;
+	}
+}
+	cout << "," << sumfree1 << "元" << endl;
+	cout << "国际游自由行：乘客姓名：";
+	int sumfree2 = 0;
+	for (int i = 1; i <= M; i++)
+	{
+
+		if (p[i]->getdes() == 2 && p[i]->getstyle() == 0)
+		{
+			cout << p[i]->getnum() << " ";
+			sumfree2 += 500;
+			if (p[i]->getlug() == 3)
+				sumfree2 += 100;
+		}
+	}
+	cout << "," << sumfree2 << "元" << endl;
+
+
+
+
+	cout << "国内短途团购：乘客姓名：";
+	int sumteam1 = 0;
+	for (int i = 1; i <= M; i++)
+	{
+
+		if (p[i]->getdes() == 0 && p[i]->getstyle() ==1)
+		{
+			cout << p[i]->getnum() << " ";
+			sumteam1 += 10;
+			
+		}
+	}
+	cout << "," << sumteam1 << "元" << endl;
+
+
+	cout << "国内长途团购：乘客姓名：";
+	int sumteam2 = 0;
+	for (int i = 1; i <= M; i++)
+	{
+
+		if (p[i]->getdes() == 1 && p[i]->getstyle() == 1)
+		{
+			cout << p[i]->getnum() << " ";
+			sumteam2 += 100;
+
+		}
+	}
+	cout << "," << sumteam2 << "元" << endl;
+
+
+	cout << "国际游团购：乘客姓名：";
+	int sumteam3 = 0;
+	for (int i = 1; i <= M; i++)
+	{
+
+		if (p[i]->getdes() == 2 && p[i]->getstyle() == 1)
+		{
+			cout << p[i]->getnum() << " ";
+			sumteam3 += 500;
+			if (p[i]->getlug() == 3)
+				sumteam3+= 100;
+		}
+	}
+	cout << "," << sumteam3 << "元" << endl;
+}
+
